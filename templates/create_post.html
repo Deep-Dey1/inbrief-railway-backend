@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Post - InBrief Admin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #2d3748;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .railway-badge {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #2d3748;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-group small {
+            color: #718096;
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: block;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: space-between;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #2d3748;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+
+        .flash {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .flash.success {
+            background: rgba(72, 187, 120, 0.1);
+            color: #38a169;
+            border-left: 4px solid #38a169;
+        }
+
+        .flash.error {
+            background: rgba(245, 101, 101, 0.1);
+            color: #e53e3e;
+            border-left: 4px solid #e53e3e;
+        }
+
+        .preview-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(248, 250, 252, 0.8);
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .preview-section h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .preview-content {
+            color: #4a5568;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .form-container {
+                padding: 25px;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+
+        .character-count {
+            text-align: right;
+            color: #718096;
+            font-size: 0.85em;
+            margin-top: 5px;
+        }
+
+        .url-validator {
+            display: inline-block;
+            margin-left: 10px;
+            color: #38a169;
+            font-size: 0.9em;
+        }
+
+        .image-upload-section {
+            margin-bottom: 15px;
+        }
+
+        .upload-area {
+            border: 2px dashed #cbd5e0;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(248, 250, 252, 0.5);
+        }
+
+        .upload-area:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .upload-area.dragover {
+            border-color: #43e97b;
+            background: rgba(67, 233, 123, 0.1);
+        }
+
+        .upload-content {
+            pointer-events: none;
+        }
+
+        .upload-icon {
+            font-size: 3em;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .upload-progress {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar::after {
+            content: '';
+            display: block;
+            height: 100%;
+            background: linear-gradient(90deg, #43e97b, #38f9d7);
+            width: 0%;
+            transition: width 0.3s ease;
+            animation: loading 2s infinite;
+        }
+
+        @keyframes loading {
+            0% { width: 0%; }
+            50% { width: 60%; }
+            100% { width: 100%; }
+        }
+
+        .progress-text {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .image-preview {
+            margin-top: 15px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .image-preview img {
+            max-width: 200px;
+            max-height: 150px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .remove-image {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #e53e3e;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✍️ Create New Post</h1>
+            <div class="railway-badge">🚂 Railway Deployment</div>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <div class="form-container">
+            <form method="POST" action="{{ url_for('create_post') }}" id="postForm">
+                <div class="form-group">
+                    <label for="title">📰 Post Title *</label>
+                    <input type="text" id="title" name="title" required maxlength="500" 
+                           placeholder="Enter an engaging title for your news post">
+                    <div class="character-count" id="titleCount">0/500 characters</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="author">👤 Author</label>
+                    <input type="text" id="author" name="author" value="Admin" maxlength="200"
+                           placeholder="Author name">
+                </div>
+
+                <div class="form-group">
+                    <label for="content">📝 Content</label>
+                    <textarea id="content" name="content" rows="8" 
+                              placeholder="Write your news content here. This will be displayed in the mobile app."></textarea>
+                    <small>Write engaging content that will capture your readers' attention.</small>
+                    <div class="character-count" id="contentCount">0 characters</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="image_upload">🖼️ Upload Image</label>
+                    <div class="image-upload-section">
+                        <input type="file" id="image_upload" accept="image/*" style="display: none;">
+                        <div class="upload-area" id="uploadArea">
+                            <div class="upload-content">
+                                <span class="upload-icon">📷</span>
+                                <p>Click to upload image or drag and drop</p>
+                                <small>Supports: JPG, PNG, GIF (Max 10MB)</small>
+                            </div>
+                        </div>
+                        <div class="upload-progress" id="uploadProgress" style="display: none;">
+                            <div class="progress-bar"></div>
+                            <span class="progress-text">Uploading...</span>
+                        </div>
+                        <div class="image-preview" id="imagePreview" style="display: none;">
+                            <img id="previewImg" src="" alt="Preview">
+                            <button type="button" class="remove-image" id="removeImage">❌</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="image_url">🔗 Or Enter Image URL</label>
+                    <input type="url" id="image_url" name="image_url" 
+                           placeholder="https://example.com/image.jpg">
+                    <small>You can either upload an image above or provide a URL here.</small>
+                    <span class="url-validator" id="imageValidator" style="display: none;">✅ Valid URL</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="source_url">🔗 Source URL</label>
+                    <input type="url" id="source_url" name="source_url" 
+                           placeholder="https://source-website.com/article">
+                    <small>Optional: Link to the original source or related article.</small>
+                    <span class="url-validator" id="sourceValidator" style="display: none;">✅ Valid URL</span>
+                </div>
+
+                <div class="preview-section" id="previewSection" style="display: none;">
+                    <h3>📱 Mobile App Preview</h3>
+                    <div class="preview-content">
+                        <div id="previewTitle" style="font-weight: bold; color: #2d3748; margin-bottom: 10px;"></div>
+                        <div id="previewAuthor" style="color: #718096; font-size: 0.9em; margin-bottom: 10px;"></div>
+                        <div id="previewContent" style="color: #4a5568;"></div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">
+                        ← Back to Dashboard
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        🚀 Publish Post
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Character counting
+        const titleInput = document.getElementById('title');
+        const contentInput = document.getElementById('content');
+        const titleCount = document.getElementById('titleCount');
+        const contentCount = document.getElementById('contentCount');
+
+        titleInput.addEventListener('input', function() {
+            const count = this.value.length;
+            titleCount.textContent = `${count}/500 characters`;
+            titleCount.style.color = count > 450 ? '#e53e3e' : '#718096';
+            updatePreview();
+        });
+
+        contentInput.addEventListener('input', function() {
+            const count = this.value.length;
+            contentCount.textContent = `${count} characters`;
+            updatePreview();
+        });
+
+        // URL validation
+        const imageUrlInput = document.getElementById('image_url');
+        const sourceUrlInput = document.getElementById('source_url');
+        const imageValidator = document.getElementById('imageValidator');
+        const sourceValidator = document.getElementById('sourceValidator');
+
+        function validateUrl(input, validator) {
+            input.addEventListener('input', function() {
+                const url = this.value.trim();
+                if (url && isValidUrl(url)) {
+                    validator.style.display = 'inline';
+                    this.style.borderColor = '#38a169';
+                } else if (url) {
+                    validator.style.display = 'none';
+                    this.style.borderColor = '#e53e3e';
+                } else {
+                    validator.style.display = 'none';
+                    this.style.borderColor = '#e2e8f0';
+                }
+            });
+        }
+
+        function isValidUrl(string) {
+            try {
+                new URL(string);
+                return true;
+            } catch (_) {
+                return false;
+            }
+        }
+
+        validateUrl(imageUrlInput, imageValidator);
+        validateUrl(sourceUrlInput, sourceValidator);
+
+        // Live preview
+        const authorInput = document.getElementById('author');
+        const previewSection = document.getElementById('previewSection');
+        const previewTitle = document.getElementById('previewTitle');
+        const previewAuthor = document.getElementById('previewAuthor');
+        const previewContent = document.getElementById('previewContent');
+
+        authorInput.addEventListener('input', updatePreview);
+
+        function updatePreview() {
+            const title = titleInput.value.trim();
+            const author = authorInput.value.trim();
+            const content = contentInput.value.trim();
+
+            if (title || content) {
+                previewSection.style.display = 'block';
+                previewTitle.textContent = title || 'Untitled Post';
+                previewAuthor.textContent = `By ${author || 'Admin'}`;
+                previewContent.textContent = content || 'No content yet...';
+            } else {
+                previewSection.style.display = 'none';
+            }
+        }
+
+        // Auto-resize textarea
+        contentInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+
+        // Form validation
+        document.getElementById('postForm').addEventListener('submit', function(e) {
+            const title = titleInput.value.trim();
+            if (!title) {
+                e.preventDefault();
+                alert('Please enter a title for your post.');
+                titleInput.focus();
+                return false;
+            }
+        });
+
+        // Image Upload Functionality
+        const uploadArea = document.getElementById('uploadArea');
+        const imageUpload = document.getElementById('image_upload');
+        const uploadProgress = document.getElementById('uploadProgress');
+        const imagePreview = document.getElementById('imagePreview');
+        const previewImg = document.getElementById('previewImg');
+        const removeImage = document.getElementById('removeImage');
+        // imageUrlInput already declared above
+
+        // Click to upload
+        uploadArea.addEventListener('click', () => {
+            imageUpload.click();
+        });
+
+        // Drag and drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleImageUpload(files[0]);
+            }
+        });
+
+        // File input change
+        imageUpload.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleImageUpload(e.target.files[0]);
+            }
+        });
+
+        // Remove image
+        removeImage.addEventListener('click', () => {
+            imagePreview.style.display = 'none';
+            uploadArea.style.display = 'block';
+            imageUrlInput.value = '';
+            imageUpload.value = '';
+        });
+
+        function handleImageUpload(file) {
+            // Validate file
+            if (!file.type.startsWith('image/')) {
+                alert('Please select an image file.');
+                return;
+            }
+
+            if (file.size > 10 * 1024 * 1024) { // 10MB limit
+                alert('File size must be less than 10MB.');
+                return;
+            }
+
+            // Show progress
+            uploadArea.style.display = 'none';
+            uploadProgress.style.display = 'block';
+
+            // Create FormData
+            const formData = new FormData();
+            formData.append('image', file);
+
+            // Upload to server
+            fetch('/admin/upload-image', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                uploadProgress.style.display = 'none';
+                
+                if (data.success) {
+                    // Show preview
+                    previewImg.src = data.image_url;
+                    imagePreview.style.display = 'block';
+                    
+                    // Set URL in form
+                    imageUrlInput.value = data.image_url;
+                    
+                    console.log('Image uploaded successfully:', data.image_url);
+                } else {
+                    uploadArea.style.display = 'block';
+                    alert('Upload failed: ' + data.error);
+                }
+            })
+            .catch(error => {
+                uploadProgress.style.display = 'none';
+                uploadArea.style.display = 'block';
+                console.error('Upload error:', error);
+                alert('Upload failed. Please try again.');
+            });
+        }
+    </script>
+</body>
+</html>
