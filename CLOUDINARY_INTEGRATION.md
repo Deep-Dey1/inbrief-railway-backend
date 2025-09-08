@@ -66,9 +66,9 @@ class NetworkService {
 Add these to your Railway project:
 
 ```
-CLOUDINARY_CLOUD_NAME=dhktf9m25
-CLOUDINARY_API_KEY=159532712964974
-CLOUDINARY_API_SECRET=DssDwgjlFynfrU2V8sFZzt3ixF8
+CLOUDINARY_CLOUD_NAME= cloud name
+CLOUDINARY_API_KEY=api key of cloudinary
+CLOUDINARY_API_SECRET=api secret of cloudinary
 ```
 
 ## 🚀 Deployment Benefits
