@@ -43,8 +43,8 @@ git push -u origin main
 ### Step 3: Environment Variables
 Add these in Railway Dashboard → Variables:
 ```
-DATABASE_URL=postgresql://postgres.iwzmixjdzjdukkrkwyxh:InBrief2025!@aws-0-ap-south-1.pooler.supabase.com:5432/postgres
-SECRET_KEY=inbrief-railway-production-key-2025
+DATABASE_URL= postgress db url
+SECRET_KEY=your application secret key
 FLASK_ENV=production
 FLASK_DEBUG=false
 ```
